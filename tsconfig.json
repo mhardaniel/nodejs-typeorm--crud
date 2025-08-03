@@ -1,0 +1,26 @@
+{
+   "compilerOptions": {
+      "lib": [
+         "es2021"
+      ],
+      "target": "es2021",
+      "module": "Preserve",
+      "moduleDetection": "force",
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
+      "outDir": "./build",
+      "rootDir": "./src",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true,
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "allowJs": true,
+      "isolatedModules": true,
+   },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"],
+}
