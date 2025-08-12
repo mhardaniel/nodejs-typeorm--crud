@@ -14,7 +14,7 @@ export class Product {
   @Column('varchar')
   name!: string;
 
-  @Column('int')
+  @Column('float')
   price!: number;
 
   @Column('varchar')

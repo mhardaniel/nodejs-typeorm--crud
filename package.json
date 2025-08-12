@@ -5,7 +5,11 @@
   "type": "module",
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@graphql-codegen/cli": "5.0.7",
+    "@graphql-codegen/typescript": "4.1.6",
+    "@graphql-codegen/typescript-resolvers": "4.5.1",
     "@types/express": "^5.0.3",
+    "@types/graphql": "^14.5.0",
     "@types/node": "^22.13.10",
     "eslint": "^9.32.0",
     "globals": "^16.3.0",
@@ -15,19 +19,25 @@
     "typescript-eslint": "^8.38.0"
   },
   "dependencies": {
+    "@apollo/server": "^5.0.0",
+    "@as-integrations/express4": "^1.1.2",
     "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^4.21.2",
+    "graphql": "^16.11.0",
+    "graphql-scalars": "^1.24.2",
+    "graphql-tag": "^2.12.6",
     "reflect-metadata": "^0.2.2",
     "sqlite3": "^5.1.7",
     "typeorm": "0.3.25"
   },
   "scripts": {
     "dev": "tsx watch ./src/index.ts",
-    "startt": "node --watch --loader ts-node/esm src/index.ts",
     "typeorm": "typeorm-ts-node-esm",
     "build": "npm i && tsc && npm i --prefix shadcn && npm run build --prefix shadcn",
     "start": "node build/index.js",
-    "lint": "eslint 'src/**/*.ts'"
+    "lint": "eslint 'src/**/*.ts'",
+    "codegen": "graphql-codegen --config codegen.ts"
   }
 }

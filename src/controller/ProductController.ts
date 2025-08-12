@@ -1,13 +1,11 @@
-import { AppDataSource } from "../data-source.js";
-import { NextFunction, Request, Response } from "express";
-import { Product } from "../entity/Product.js";
+import { NextFunction, Request, Response } from 'express';
+import { Product } from '../entity/Product.js';
+import { ProductRepository } from '../repositories/ProductRepository.js';
 
-export class ProductController {
-  private productRepository = AppDataSource.getRepository(Product);
-
+class ProductController {
   async index(request: Request, response: Response, next: NextFunction) {
     try {
-      const products = await this.productRepository.find();
+      const products = await ProductRepository.find();
 
       response.status(200).json({
         success: true,
@@ -22,14 +20,14 @@ export class ProductController {
     try {
       const id = parseInt(request.params.id);
 
-      const product = await this.productRepository.findOne({
+      const product = await ProductRepository.findOne({
         where: { id },
       });
 
       if (!product) {
         response.status(404).json({
           success: false,
-          message: "unregistered product",
+          message: 'unregistered product',
         });
         return;
       }
@@ -47,7 +45,7 @@ export class ProductController {
       if (!name || !price || !image) {
         response.status(400).json({
           success: false,
-          message: "Please provide all fields",
+          message: 'Please provide all fields',
         });
         return;
       }
@@ -58,7 +56,7 @@ export class ProductController {
         image,
       });
 
-      await this.productRepository.save(product);
+      await ProductRepository.save(product);
 
       response.status(201).json({
         success: true,
@@ -78,16 +76,16 @@ export class ProductController {
       if (!name || !price || !image) {
         response.status(400).json({
           success: false,
-          message: "Please provide all fields",
+          message: 'Please provide all fields',
         });
         return;
       }
 
-      let productToUpdate = await this.productRepository.findOneBy({ id });
+      let productToUpdate = await ProductRepository.findOneBy({ id });
       if (!productToUpdate) {
         response.status(404).json({
           success: false,
-          message: "this product not exist",
+          message: 'this product not exist',
         });
         return;
       }
@@ -96,7 +94,7 @@ export class ProductController {
         ...{ name, price, image },
       };
 
-      await this.productRepository.save(productToUpdate);
+      await ProductRepository.save(productToUpdate);
 
       response.status(201).json({
         success: true,
@@ -111,24 +109,26 @@ export class ProductController {
     try {
       const id = parseInt(request.params.id);
 
-      let productToRemove = await this.productRepository.findOneBy({ id });
+      let productToRemove = await ProductRepository.findOneBy({ id });
 
       if (!productToRemove) {
         response.status(404).json({
           success: false,
-          message: "this product not exist",
+          message: 'this product not exist',
         });
         return;
       }
 
-      await this.productRepository.remove(productToRemove);
+      await ProductRepository.remove(productToRemove);
 
       response.status(200).json({
         success: true,
-        message: "product has been removed",
+        message: 'product has been removed',
       });
     } catch (e) {
       next(e);
     }
   }
 }
+
+export default new ProductController();

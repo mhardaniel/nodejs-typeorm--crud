@@ -5,8 +5,12 @@ import path from 'path';
 
 import config from './config/config.js';
 import { AppDataSource } from './data-source.js';
-import { ProductRoutes } from './routes/productRoute.js';
+import productRoutes from './routes/productRoute.js';
 import { errorHandler } from './middleware/errorHandler.js';
+
+import { apolloServer } from './graphql/apollo-server.js';
+import { expressMiddleware } from '@as-integrations/express4';
+import { ProductAPI } from './graphql/datasources/product-api.js';
 
 const __dirname = path.resolve();
 
@@ -17,28 +21,21 @@ AppDataSource.initialize()
     app.use(bodyParser.json());
 
     // register express routes from defined application routes
+    app.use('/api/products', productRoutes);
 
-    ProductRoutes.forEach((route) => {
-      (app as any)[route.method](
-        route.route,
-        (req: Request, res: Response, next: Function) => {
-          const result = new (route.controller as any)()[route.action](
-            req,
-            res,
-            next,
-          );
-          if (result instanceof Promise) {
-            result.then((result) =>
-              result !== null && result !== undefined
-                ? res.send(result)
-                : undefined,
-            );
-          } else if (result !== null && result !== undefined) {
-            res.json(result);
-          }
+    await apolloServer.start();
+    app.use(
+      '/graphql',
+      expressMiddleware(apolloServer, {
+        context: async () => {
+          return {
+            dataSources: {
+              productAPI: new ProductAPI(),
+            },
+          };
         },
-      );
-    });
+      }),
+    );
 
     // Global error handler (should be after routes)
     app.use(errorHandler);
