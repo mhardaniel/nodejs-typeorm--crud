@@ -1,15 +1,19 @@
-import { ProductRepository } from '../../repositories/ProductRepository.js';
+import { Resolver, Query, Arg, Mutation } from 'type-graphql';
 import { Product } from '../../entity/Product.js';
-import { ApiProductResponse, ProductInput } from '../types.js';
+import { ProductRepository } from '../../repositories/ProductRepository.js';
+import { ProductInput, IProductApiResponse } from '../inputs/ProductInput.js';
 
-export class ProductAPI {
-  async index() {
+@Resolver()
+export class ProductResolver {
+  @Query(() => [Product])
+  async products() {
     try {
       return await ProductRepository.find();
     } catch (error) {}
   }
 
-  async show(id: number) {
+  @Query(() => Product)
+  async product(@Arg('id', () => String) id: string) {
     try {
       return await ProductRepository.findOne({
         where: { id },
@@ -17,11 +21,10 @@ export class ProductAPI {
     } catch (error) {}
   }
 
-  async store(productInput: ProductInput): Promise<ApiProductResponse> {
+  @Mutation(() => IProductApiResponse)
+  async storeProduct(@Arg('data', () => ProductInput) data: ProductInput) {
     try {
-      const product = Object.assign(new Product(), {
-        ...productInput,
-      });
+      const product = Object.assign(new Product(), data);
 
       await ProductRepository.save(product);
 
@@ -39,10 +42,11 @@ export class ProductAPI {
     }
   }
 
-  async update(
-    id: number,
-    productInput: ProductInput,
-  ): Promise<ApiProductResponse> {
+  @Mutation(() => IProductApiResponse)
+  async updateProduct(
+    @Arg('id', () => String) id: string,
+    @Arg('data', () => ProductInput) data: ProductInput,
+  ) {
     try {
       let productToUpdate = await ProductRepository.findOneBy({ id });
       if (!productToUpdate) {
@@ -51,10 +55,8 @@ export class ProductAPI {
           message: 'this product not exist',
         };
       }
-      productToUpdate = {
-        ...productToUpdate,
-        ...productInput,
-      };
+
+      Object.assign(productToUpdate, data);
 
       await ProductRepository.save(productToUpdate);
 
@@ -72,7 +74,10 @@ export class ProductAPI {
     }
   }
 
-  async destroy(id: number): Promise<ApiProductResponse> {
+  @Mutation(() => IProductApiResponse)
+  async destroyProduct(
+    @Arg('id', () => String) id: string,
+  ): Promise<IProductApiResponse> {
     try {
       let productToRemove = await ProductRepository.findOneBy({ id });
 

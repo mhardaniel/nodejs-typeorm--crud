@@ -1,26 +1,58 @@
 {
-   "compilerOptions": {
-      "lib": [
-         "es2021"
-      ],
-      "target": "es2021",
-      "module": "Preserve",
-      "moduleDetection": "force",
-      "moduleResolution": "node",
-      "allowSyntheticDefaultImports": true,
-      "outDir": "./build",
-      "rootDir": "./src",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "sourceMap": true,
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,
-      "resolveJsonModule": true,
-      "allowJs": true,
-      "isolatedModules": true,
-   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"],
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./build",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    // "module": "esnext",
+    // "moduleResolution": "nodenext",
+    // "target": "ES2020",
+    // For nodejs:
+    // "lib": ["esnext"],
+    "types": ["node", "jest"],
+
+    "lib": [
+       "es2021"
+    ],
+    "target": "es2021",
+    "module": "es2022",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    "jsx": "react-jsx",
+    // "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

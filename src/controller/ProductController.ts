@@ -18,7 +18,15 @@ class ProductController {
 
   async show(request: Request, response: Response, next: NextFunction) {
     try {
-      const id = parseInt(request.params.id);
+      const id = request.params.id;
+
+      if (!id) {
+        response.status(404).json({
+          success: false,
+          message: 'unregistered product',
+        });
+        return;
+      }
 
       const product = await ProductRepository.findOne({
         where: { id },
@@ -69,7 +77,14 @@ class ProductController {
 
   async update(request: Request, response: Response, next: NextFunction) {
     try {
-      const id = parseInt(request.params.id);
+      if (!request.params.id) {
+        response.status(404).json({
+          success: false,
+          message: 'this product not exist',
+        });
+        return;
+      }
+      const id = request.params.id;
 
       const { name, price, image } = request.body;
 
@@ -107,7 +122,14 @@ class ProductController {
 
   async destroy(request: Request, response: Response, next: NextFunction) {
     try {
-      const id = parseInt(request.params.id);
+      if (!request.params.id) {
+        response.status(404).json({
+          success: false,
+          message: 'this product not exist',
+        });
+        return;
+      }
+      const id = request.params.id;
 
       let productToRemove = await ProductRepository.findOneBy({ id });
 

@@ -1,20 +1,16 @@
 import { ApolloServer } from '@apollo/server';
+import { buildSchema } from 'type-graphql';
 
-import { readFileSync } from 'fs';
-import path from 'path';
-import { gql } from 'graphql-tag';
+import { ProductResolver } from './resolvers/ProductResolver.js';
 
-import { resolvers } from './resolvers.js';
+export async function createApolloServer(): Promise<ApolloServer> {
+  const schema = await buildSchema({
+    resolvers: [ProductResolver],
+  });
 
-const __dirname = path.resolve();
+  const apolloServer = new ApolloServer({
+    schema,
+  });
 
-const typeDefs = gql(
-  readFileSync(path.resolve(__dirname, './src/graphql/schema.graphql'), {
-    encoding: 'utf-8',
-  }),
-);
-
-export const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+  return apolloServer;
+}
