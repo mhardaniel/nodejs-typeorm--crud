@@ -20,13 +20,7 @@ class ProductController {
     try {
       const id = request.params.id;
 
-      if (!id) {
-        response.status(404).json({
-          success: false,
-          message: 'unregistered product',
-        });
-        return;
-      }
+      if (!id) return;
 
       const product = await ProductRepository.findOne({
         where: { id },
@@ -35,12 +29,12 @@ class ProductController {
       if (!product) {
         response.status(404).json({
           success: false,
-          message: 'unregistered product',
+          message: 'this product not exist',
         });
         return;
       }
 
-      response.json(product);
+      response.status(200).json({ success: true, data: product });
     } catch (e) {
       next(e);
     }
@@ -77,14 +71,9 @@ class ProductController {
 
   async update(request: Request, response: Response, next: NextFunction) {
     try {
-      if (!request.params.id) {
-        response.status(404).json({
-          success: false,
-          message: 'this product not exist',
-        });
-        return;
-      }
       const id = request.params.id;
+
+      if (!id) return;
 
       const { name, price, image } = request.body;
 
@@ -111,7 +100,7 @@ class ProductController {
 
       await ProductRepository.save(productToUpdate);
 
-      response.status(201).json({
+      response.status(200).json({
         success: true,
         data: productToUpdate,
       });
@@ -122,14 +111,9 @@ class ProductController {
 
   async destroy(request: Request, response: Response, next: NextFunction) {
     try {
-      if (!request.params.id) {
-        response.status(404).json({
-          success: false,
-          message: 'this product not exist',
-        });
-        return;
-      }
       const id = request.params.id;
+
+      if (!id) return;
 
       let productToRemove = await ProductRepository.findOneBy({ id });
 

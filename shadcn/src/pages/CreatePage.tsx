@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { useProductStore } from "@/store/product"
 import type { IProduct } from "@/types/productType"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 import { toast } from 'sonner';
 
 type NewProductType = Omit<IProduct, 'id'>;
@@ -17,15 +18,16 @@ const CreatePage = () => {
     image: ''
   })
 
+  const navigate = useNavigate();
+
   const handleAddProduct = async () => {
 
     const { success, message } = await createProduct(newProduct)
 
     success ?
-      toast.success(message) :
+      toast.success(message) && navigate('/') :
       toast.error(message)
 
-    setNewProduct({ name: '', price: 0, image: '' })
   }
 
   return (

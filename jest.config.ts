@@ -10,14 +10,15 @@ const config: Config = {
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'js'],
   testMatch: ['**/tests/**/*.test.(ts|js)'],
-  transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        tsconfig: 'tsconfig.json',
-      },
-    ],
-  },
+  resolver: 'jest-ts-webcompat-resolver',
+  // transform: {
+  //   '^.+\\.tsx?$': [
+  //     'ts-jest',
+  //     {
+  //       tsconfig: 'tsconfig.json',
+  //     },
+  //   ],
+  // },
 };
 
 export default config;
