@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import helmet from 'helmet';
 import { expressMiddleware } from '@as-integrations/express4';
 
 import productRoutes from './routes/productRoute.js';
@@ -10,12 +11,12 @@ import { createApolloServer } from './graphql/apollo-server.js';
 
 import path from 'path';
 
-const __dirname = path.resolve();
-
 export default async function createApp() {
+  const __dirname = path.resolve();
   const app = express();
 
   app.use(cors());
+  app.use(helmet());
   app.use(bodyParser.json());
 
   app.use('/api/products', productRoutes);

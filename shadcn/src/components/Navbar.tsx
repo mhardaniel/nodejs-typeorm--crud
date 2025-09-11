@@ -14,7 +14,7 @@ const Navbar = () => {
         <div className="flex">
 
           <Button asChild size={"icon"} >
-            <Link to={"create"}><CiSquarePlus className="size-6" /> </Link>
+            <Link id="asdf" to={"create"}><CiSquarePlus className="size-6" /> </Link>
           </Button>
 
         </div>

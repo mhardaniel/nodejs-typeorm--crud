@@ -8,6 +8,7 @@ import { ProductRepository } from '../../src/repositories/ProductRepository.js';
 
 describe('Product API', () => {
   let app: Express;
+  let productId: number;
   const productNotExistResponseError = {
     success: false,
     message: 'this product not exist',
@@ -29,36 +30,6 @@ describe('Product API', () => {
   describe('get all products', () => {
     it('should return 200 and all products', async () => {
       const response = await request(app).get('/api/products');
-
-      const expectedResponse = {
-        success: true,
-        data: response.body.data,
-      };
-
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(expectedResponse);
-    });
-  });
-
-  describe('get a product', () => {
-    it('should return 404 if product not exist', async () => {
-      const response = await request(app).get('/api/products/1111');
-
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual(productNotExistResponseError);
-    });
-
-    it('should return 200 and a single product', async () => {
-      const product = Object.assign(new Product(), {
-        name: 'Sample Name',
-        price: 200,
-        image:
-          'https://images.unsplash.com/photo-1757151380289-a7e0a1f2a39d?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
-      });
-
-      await ProductRepository.save(product);
-
-      const response = await request(app).get(`/api/products/${product.id}`);
 
       const expectedResponse = {
         success: true,
@@ -96,12 +67,37 @@ describe('Product API', () => {
         .set('content-type', 'application/json')
         .send(requestBody);
 
+      const responseBody = response.body;
+
+      const expectedResponse = {
+        success: true,
+        data: responseBody.data,
+      };
+
+      productId = responseBody.data.id;
+
+      expect(response.status).toBe(201);
+      expect(responseBody).toEqual(expectedResponse);
+    });
+  });
+
+  describe('get a product', () => {
+    it('should return 404 if product not exist', async () => {
+      const response = await request(app).get('/api/products/1111');
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(productNotExistResponseError);
+    });
+
+    it('should return 200 and a single product', async () => {
+      const response = await request(app).get(`/api/products/${productId}`);
+
       const expectedResponse = {
         success: true,
         data: response.body.data,
       };
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(200);
       expect(response.body).toEqual(expectedResponse);
     });
   });
@@ -114,18 +110,11 @@ describe('Product API', () => {
         'https://images.unsplash.com/photo-1757151380289-a7e0a1f2a39d?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
     };
 
-    let product: Product;
-    beforeEach(async () => {
-      product = Object.assign(new Product(), requestBody);
-
-      await ProductRepository.save(product);
-    });
-
     it('should return 400 if any of the request body is missing', async () => {
       const { name, price } = requestBody;
 
       const response = await request(app)
-        .put(`/api/products/${product.id}`)
+        .put(`/api/products/${productId}`)
         .set('content-type', 'application/json')
         .send({ name, price });
 
@@ -145,7 +134,7 @@ describe('Product API', () => {
 
     it('should return 200 and the updated product', async () => {
       const response = await request(app)
-        .put(`/api/products/${product.id}`)
+        .put(`/api/products/${productId}`)
         .set('content-type', 'application/json')
         .send({ ...requestBody, name: 'updated' });
 
@@ -160,20 +149,6 @@ describe('Product API', () => {
   });
 
   describe('delete a product', () => {
-    const requestBody = {
-      name: 'product deleting',
-      price: 199,
-      image:
-        'https://images.unsplash.com/photo-1757151380289-a7e0a1f2a39d?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
-    };
-
-    let product: Product;
-    beforeEach(async () => {
-      product = Object.assign(new Product(), requestBody);
-
-      await ProductRepository.save(product);
-    });
-
     it('should return 404 if product not exist', async () => {
       const response = await request(app).delete('/api/products/1111');
 
@@ -182,7 +157,7 @@ describe('Product API', () => {
     });
 
     it('should return 200 and the success response object', async () => {
-      const response = await request(app).delete(`/api/products/${product.id}`);
+      const response = await request(app).delete(`/api/products/${productId}`);
 
       const expectedResponse = {
         success: true,

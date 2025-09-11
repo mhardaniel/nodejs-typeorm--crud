@@ -1,0 +1,1 @@
+{"root":["./cypress/app.cy.ts","./cypress/api/api-products.spec.ts","./cypress/support/commands.ts","./cypress/support/e2e.ts"],"errors":true,"version":"5.8.3"}
