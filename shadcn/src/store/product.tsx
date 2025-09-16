@@ -50,6 +50,10 @@ export const useProductStore = create<ProductState>()((set) => ({
     return { success: true, message: data.message };
   },
   updateProduct: async (id, updatedProduct) => {
+    if (!updatedProduct.name || !updatedProduct.price || !updatedProduct.image) {
+      return { success: false, message: 'Please fill in all fields.' }
+    }
+
     const res = await fetch(`/api/products/${id}`, {
       method: "PUT",
       headers: {

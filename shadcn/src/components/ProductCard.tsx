@@ -42,17 +42,17 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   };
 
   return (
-    <div>
+    <div className="product-item">
       <div className="shadow-lg rounded-lg overflow-hidden transition-all duration-[0.3s] hover:-translate-y-2 hover:shadow-xl">
         <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
         <div className="p-4">
-          <h2 className="text-xl mb-2">{product.name}</h2>
-          <span className="block font-bold text-md mb-4">${product.price}</span>
+          <h2 className="product-name text-xl mb-2">{product.name}</h2>
+          <span className="product-price block font-bold text-md mb-4">${product.price}</span>
           <div className="flex gap-2">
-            <Button variant="secondary" size="icon" className="size-8 bg-blue-200 hover:cursor-pointer" onClick={() => setOpen(true)}>
+            <Button variant="secondary" size="icon" className="product-edit size-8 bg-blue-200 hover:cursor-pointer" onClick={() => setOpen(true)}>
               <FaRegEdit />
             </Button>
-            <Button variant="secondary" size="icon" className="size-8 bg-red-200 hover:cursor-pointer" onClick={() => handleDeleteProduct(product.id)}>
+            <Button variant="secondary" size="icon" className="product-delete size-8 bg-red-200 hover:cursor-pointer" onClick={() => handleDeleteProduct(product.id)}>
               <MdDelete />
             </Button>
           </div>
@@ -69,15 +69,15 @@ const ProductCard = ({ product }: { product: IProduct }) => {
             <div className="grid gap-4">
               <div className="grid gap-3">
                 <Label htmlFor="name">Product Name</Label>
-                <Input id="name" name="name" defaultValue={updatedProduct.name} onChange={(e) => setUpdatedProduct({ ...updatedProduct, name: e.target.value })} />
+                <Input id="name" name="name" defaultValue={product.name} onChange={(e) => setUpdatedProduct({ ...updatedProduct, name: e.target.value })} />
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="price">Price</Label>
-                <Input id="price" name="price" type="number" defaultValue={updatedProduct.price} onChange={(e) => setUpdatedProduct({ ...updatedProduct, price: e.target.valueAsNumber })} />
+                <Input id="price" name="price" type="number" defaultValue={product.price} onChange={(e) => setUpdatedProduct({ ...updatedProduct, price: e.target.valueAsNumber })} />
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="image">Product Name</Label>
-                <Input id="image" name="image" defaultValue={updatedProduct.image} onChange={(e) => setUpdatedProduct({ ...updatedProduct, image: e.target.value })} />
+                <Input id="image" name="image" defaultValue={product.image} onChange={(e) => setUpdatedProduct({ ...updatedProduct, image: e.target.value })} />
               </div>
 
             </div>

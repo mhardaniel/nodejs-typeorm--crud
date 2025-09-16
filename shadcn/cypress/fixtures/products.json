@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": 199,
+      "name": "Product One",
+      "price": 199.99,
+      "image": "https://images.unsplash.com/photo-1757492166964-518d2c8b9f41?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8"
+    },
+    {
+      "id": 299,
+      "name": "Product Two",
+      "price": 299.99,
+      "image": "https://images.unsplash.com/photo-1757492166964-518d2c8b9f41?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8"
+    }
+  ]
+}
