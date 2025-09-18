@@ -8,12 +8,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "types": [
-      "cypress"
-    ]
-  },
-  "include": [
-    "cypress/**/*.ts",
-  ]
+    }
+  }
 }

@@ -44,10 +44,10 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   return (
     <div className="product-item">
       <div className="shadow-lg rounded-lg overflow-hidden transition-all duration-[0.3s] hover:-translate-y-2 hover:shadow-xl">
-        <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+        <img src={updatedProduct.image} alt={updatedProduct.name} className="w-full h-48 object-cover" />
         <div className="p-4">
-          <h2 className="product-name text-xl mb-2">{product.name}</h2>
-          <span className="product-price block font-bold text-md mb-4">${product.price}</span>
+          <h2 className="product-name text-xl mb-2">{updatedProduct.name}</h2>
+          <span className="product-price block font-bold text-md mb-4">${updatedProduct.price}</span>
           <div className="flex gap-2">
             <Button variant="secondary" size="icon" className="product-edit size-8 bg-blue-200 hover:cursor-pointer" onClick={() => setOpen(true)}>
               <FaRegEdit />
@@ -83,7 +83,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button id="cancel-update-dialog" variant="outline">Cancel</Button>
               </DialogClose>
               <Button type="submit" onClick={() => handleUpdateProduct(product.id, updatedProduct)}>Save changes</Button>
             </DialogFooter>
