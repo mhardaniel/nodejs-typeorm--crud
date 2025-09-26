@@ -1,73 +1,117 @@
-import type { IProduct, IProductStateResponse } from '@/types/productType'
+import type { ProductState } from '@/types/productType'
 import { create } from 'zustand'
 
-interface ProductState {
-  products: IProduct[];
-  setProducts: (products: IProduct[]) => void;
-  createProduct: (newProduct: Omit<IProduct, 'id'>) => Promise<IProductStateResponse>;
-  fetchProducts: () => void;
-  deleteProduct: (id: number) => Promise<IProductStateResponse>;
-  updateProduct: (id: number, updatedProduct: IProduct) => Promise<IProductStateResponse>;
-}
-
 export const useProductStore = create<ProductState>()((set) => ({
+  loading: false,
+  error: null,
+
   products: [],
-  setProducts: (products) => set({ products }),
+
   createProduct: async (newProduct) => {
-    if (!newProduct.name || !newProduct.price || !newProduct.image) {
-      return { success: false, message: 'Please fill in all fields.' }
+    set({ loading: true, error: null })
+
+    try {
+      if (!newProduct.name || !newProduct.price || !newProduct.image) {
+        return { success: false, message: 'Please fill in all fields.' }
+      }
+
+      const res = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newProduct),
+      })
+
+      const data = await res.json()
+      set((state) => ({
+        products: [...state.products, data.data],
+        loading: false,
+      }))
+
+      return { success: true, message: 'Product created successfully.' }
+    } catch (err: unknown) {
+      console.error(err)
+
+      const errorMsg = 'Failed to create product'
+      set({ error: errorMsg, loading: false })
+      return { success: false, message: errorMsg }
     }
-
-    const res = await fetch('/api/products', {
-      method: 'POST',
-      headers: {
-        'Content-Type': "application/json"
-      },
-      body: JSON.stringify(newProduct)
-    })
-
-    const data = await res.json()
-    set((state) => ({
-      products: [...state.products, data.data]
-    }))
-
-    return { success: true, message: 'Product created successfully.' }
   },
   fetchProducts: async () => {
-    const res = await fetch("/api/products");
-    const data = await res.json();
-    set({ products: data.data });
+    set({ loading: true, error: null })
+
+    try {
+      const res = await fetch('/api/products')
+      const data = await res.json()
+      set({ products: data.data, loading: false })
+    } catch (err: unknown) {
+      console.error(err)
+
+      const errorMsg = 'Failed to fetch products'
+      set({ error: errorMsg, loading: false })
+    }
   },
   deleteProduct: async (id) => {
-    const res = await fetch(`/api/products/${id}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
+    set({ loading: true, error: null })
 
-    set((state) => ({ products: state.products.filter((product) => product.id !== id) }));
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'DELETE',
+      })
+      const data = await res.json()
+      if (!data.success) return { success: false, message: data.message }
 
-    return { success: true, message: data.message };
+      set((state) => ({
+        products: state.products.filter((product) => product.id !== id),
+        loading: false,
+      }))
+
+      return { success: true, message: data.message }
+    } catch (err: unknown) {
+      console.error(err)
+
+      const errorMsg = 'Failed to delete product'
+      set({ error: errorMsg, loading: false })
+      return { success: false, message: errorMsg }
+    }
   },
   updateProduct: async (id, updatedProduct) => {
-    if (!updatedProduct.name || !updatedProduct.price || !updatedProduct.image) {
-      return { success: false, message: 'Please fill in all fields.' }
+    set({ loading: true, error: null })
+
+    try {
+      if (
+        !updatedProduct.name ||
+        !updatedProduct.price ||
+        !updatedProduct.image
+      ) {
+        return { success: false, message: 'Please fill in all fields.' }
+      }
+
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProduct),
+      })
+      const data = await res.json()
+      if (!data.success) return { success: false, message: data.message }
+
+      set((state) => ({
+        products: state.products.map((product) =>
+          product.id === id ? data.data : product,
+        ),
+        loading: false,
+      }))
+
+      return { success: true, message: 'Product updated successfully' }
+    } catch (err: unknown) {
+      console.error(err)
+      const errorMsg = 'Failed to update product'
+      set({ error: errorMsg, loading: false })
+
+      return { success: false, message: errorMsg }
     }
-
-    const res = await fetch(`/api/products/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedProduct),
-    });
-    const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
-
-    set((state) => ({
-      products: state.products.map((product) => (product.id === id ? data.data : product)),
-    }));
-
-    return { success: true, message: 'Product updated successfully' };
   },
 }))
