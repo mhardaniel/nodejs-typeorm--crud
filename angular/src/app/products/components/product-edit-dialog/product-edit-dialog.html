@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>Update Product</h2>
+<mat-dialog-content>
+  <div class="w-sm md:w-lg mx-auto py-12">
+    <div class="w-full">
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+        <mat-form-field class="example-full-width">
+          <mat-label>Product Name</mat-label>
+          <input matInput placeholder="Name" formControlName="name" />
+          @if (name?.hasError('required')) {
+            <mat-error>Name is <strong>required</strong></mat-error>
+          }
+
+          @if (name?.hasError('minlength')) {
+            <mat-error>Name must be at least 4 characters long.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Product Price</mat-label>
+          <input matInput placeholder="Price" formControlName="price" type="number" />
+
+          @if (price?.hasError('required') || price?.hasError('min')) {
+            <mat-error>Price is <strong>required</strong></mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Image URL</mat-label>
+          <input matInput placeholder="URL" formControlName="image" />
+          @if (productForm.get('image')?.hasError('required')) {
+            <mat-error>Image is <strong>required</strong></mat-error>
+          }
+        </mat-form-field>
+
+        <div class="flex gap-5 justify-end">
+          <button matButton="elevated" mat-dialog-close>Cancel</button>
+          <button type="submit" [disabled]="!productForm.valid" matButton="filled">
+            Save changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</mat-dialog-content>

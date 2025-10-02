@@ -1,0 +1,20 @@
+<div class="product-item">
+  <div
+    class="shadow-lg rounded-lg overflow-hidden transition-all duration-[0.3s] hover:-translate-y-2 hover:shadow-xl"
+  >
+    <img [src]="product().image" [alt]="product().name" class="w-full h-48 object-cover" />
+    <div class="p-4">
+      <h2 class="product-name text-xl mb-2">{{ product().name }}</h2>
+      <span class="product-price block font-bold text-md mb-4"> ${{ product().price }}</span>
+      <div class="flex gap-2">
+        <button class="product--edit-btn" matIconButton (click)="openProductEditDialog()">
+          <mat-icon class="product--edit-icon">edit_square</mat-icon>
+        </button>
+
+        <button class="product--delete-btn" matIconButton (click)="confirmProductDeleteDialog()">
+          <mat-icon class="product--delete-icon">delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

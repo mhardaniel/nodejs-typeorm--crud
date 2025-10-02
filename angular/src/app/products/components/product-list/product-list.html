@@ -1,0 +1,23 @@
+<div class="max-w-5xl mx-auto py-12">
+  <div class="w-full p-5">
+    <h1 class="text-2xl mb-5 text-center">Current Products</h1>
+    @if (products.length > 0) {
+      <div data-cy="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        @for (product of products; track product.id) {
+          <app-product-item
+            [product]="product"
+            (deletedProduct)="onDeleteProduct($event)"
+            (updatedProduct)="onUpdateProduct($event)"
+          />
+        }
+      </div>
+    } @else {
+      <span data-cy="empty-products" class="flex items-center justify-center gap-2">
+        No products found 😢
+        <a matButton routerLink="/product-add" class="text-blue-500 hover:underline"
+          >Create a product
+        </a>
+      </span>
+    }
+  </div>
+</div>

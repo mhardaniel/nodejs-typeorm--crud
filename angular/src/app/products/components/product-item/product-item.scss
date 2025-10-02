@@ -1,0 +1,21 @@
+@use '@angular/material' as mat;
+
+.product--edit-btn {
+  &:hover .product--edit-icon {
+    @include mat.icon-overrides(
+      (
+        color: var(--mat-sys-primary),
+      )
+    );
+  }
+}
+
+.product--delete-btn {
+  &:hover .product--delete-icon {
+    @include mat.icon-overrides(
+      (
+        color: var(--mat-sys-error),
+      )
+    );
+  }
+}
