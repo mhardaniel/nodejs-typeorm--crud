@@ -5,7 +5,11 @@ import { ProductRepository } from '../repositories/ProductRepository.js';
 class ProductController {
   async index(request: Request, response: Response, next: NextFunction) {
     try {
-      const products = await ProductRepository.find();
+      const products = await ProductRepository.find({
+        order: {
+          created_at: 'DESC',
+        },
+      });
 
       response.status(200).json({
         success: true,
