@@ -5,8 +5,14 @@ export interface IProduct {
   image: string;
 }
 
-export interface IProductResponse {
+export interface IProductsResponse {
   success: boolean;
   message: string;
   data: IProduct[];
+}
+
+export interface IProductResponse {
+  success: boolean;
+  message: string;
+  data: IProduct;
 }

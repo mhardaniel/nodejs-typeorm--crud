@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { IProduct } from '../../types/product.interface';
 import { ProductService } from '../../services/product.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-product-dialog',
@@ -24,8 +25,8 @@ export class ProductEditDialog {
   private formBuilder = inject(FormBuilder);
   readonly dialogRef = inject(MatDialogRef<ProductEditDialog>);
   readonly data = inject<{ product: IProduct }>(MAT_DIALOG_DATA);
-
   productService = inject(ProductService);
+  private _snackBar = inject(MatSnackBar);
 
   productForm = this.formBuilder.nonNullable.group({
     name: [this.data.product.name, [Validators.required, Validators.minLength(4)]],
@@ -41,12 +42,21 @@ export class ProductEditDialog {
     return this.productForm.get('price');
   }
 
+  constructor() {
+    console.warn('Product Edit Dialog Comp');
+  }
+
   onSubmit() {
     if (!this.productForm.valid) return;
 
     this.productService.updateProduct(this.data.product.id, this.productForm.value).subscribe({
       next: () => {
-        this.dialogRef.close(this.productForm.value);
+        this.dialogRef.close();
+
+        this._snackBar.open('Product has been updated', 'Close', {
+          horizontalPosition: 'right',
+          duration: 5000,
+        });
       },
     });
   }
